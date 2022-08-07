@@ -39,8 +39,8 @@ public class BaseDriver {
             case "LINUX_CHROME": {
                 System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + property.getProperty("LINUX_CHROME_PATH"));
                 ChromeOptions chromeOptions = new ChromeOptions();
-                chromeOptions.addArguments("--headless","window-size=1920,1200");
-                chromeOptions.addArguments("--no-sandox");
+                chromeOptions.addArguments("--headless", "window-size=1920,1200");
+                chromeOptions.addArguments("--no-sandbox");
                 chromeOptions.addArguments("--disable-dev-shm-usage");
                 driver = new ChromeDriver(chromeOptions);
                 logger.info("Linux Chrome Driver is launched for CircleCI");
