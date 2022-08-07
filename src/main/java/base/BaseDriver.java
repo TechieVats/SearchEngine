@@ -31,12 +31,22 @@ public class BaseDriver {
 
         switch (browserName) {
             case "CHROME": {
-                System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/webdrivers/chromedriver.exe");
-                System.out.println("Path of the driver "+ System.getProperty("user.dir") + property.getProperty("CHROME_PATH"));
+                System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + property.getProperty("CHROME_PATH"));
                 driver = new ChromeDriver();
                 logger.info("Chrome Driver is launched");
                 break;
             }
+            case "LINUX_CHROME": {
+                System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + property.getProperty("LINUX_CHROME_PATH"));
+                ChromeOptions chromeOptions = new ChromeOptions();
+                chromeOptions.addArguments("--headless","window-size=1920,1200");
+                chromeOptions.addArguments("--no-sandox");
+                chromeOptions.addArguments("--disable-dev-shm-usage");
+                driver = new ChromeDriver(chromeOptions);
+                logger.info("Linux Chrome Driver is launched for CircleCI");
+                break;
+            }
+
             case "FIREFOX": {
                 System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir") + property.getProperty("GECKO_PATH"));
                 driver = new FirefoxDriver();
