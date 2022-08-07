@@ -2,7 +2,6 @@ Feature: To perform search function on various Search Engine
 
   @Search
   Scenario Outline: User is parsing the 10 search results from different search engine and comparing the results
-
     Given that the user is on google search engine
     When the user search the "<keyword>" in the search engine
     Then user is able to parse top 10 search results for google search engine
