@@ -10,16 +10,15 @@ import org.apache.logging.log4j.Logger;
 import java.net.MalformedURLException;
 
 public class BrowserHooks extends BaseDriver {
-    private static Logger Log = LogManager.getLogger(BrowserHooks.class.getName());
     @Before()
-    public void init(Scenario scenario) throws MalformedURLException {
-            Log.info("Scenario: "+scenario.getName()+" is started");
+    public void init(Scenario scenario) {
+            logger.info("Scenario: "+scenario.getName()+" is started");
             creatingTheSession();
     }
 
     @After()
     public void teardown(Scenario scenario){
-            Log.info("Scenario: "+scenario.getName()+" is completed");
-          // driver.quit();
+            logger.info("Scenario: "+scenario.getName()+" is completed");
+            driver.quit();
     }
 }

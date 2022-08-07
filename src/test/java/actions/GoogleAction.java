@@ -1,11 +1,11 @@
 package actions;
 
 import base.BaseDriver;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import pages.Google;
 import pages.GoogleSearchResults;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,44 +13,51 @@ public class GoogleAction extends BaseDriver {
     Google google = new Google();
     GoogleSearchResults googleSearchResults = new GoogleSearchResults();
     BaseDriver base = new BaseDriver();
-    int count=0;
-    public static List<String> searchResultsHref = new ArrayList<>();
-    private static Logger logger = LogManager.getLogger(GoogleAction.class.getName());
+    int count = 0;
+    public static String KEYWORD = null;
+    public List<String> searchResultsKeyWord = new ArrayList<>();
+    public List<String> searchResultsWithoutKeyWord = new ArrayList<>();
 
     public void userIsOnGoogle() {
         base.navigateToGoogleUrl();
     }
 
     public void userIsSearchingTheKeyWord(String keyword) {
-        google.enterTheSearchKeyword(keyword);
+        KEYWORD = keyword;
+        google.enterTheSearchKeyword(KEYWORD);
         google.clickOnGoogleSearch();
-        logger.info("User is searching "+keyword+" on google search engine");
+        logger.info("User is searching " + KEYWORD + " on google search engine");
     }
 
     public List<String> getGoogleSearchResults() {
         List<String> searchResult = new ArrayList<>();
         searchResult = googleSearchResults.getTopResults();
-        logger.info("size of the list: " + searchResult.size());
-        logger.info("print the item of the list: " + searchResult);
-        for (int i = 0; i < searchResult.size()-1; i++) {
-            if (searchResult.get(i).contains("People also ask") || searchResult.get(i).contains("Videos") || searchResult.get(i).contains("Top stories")) {
-
-            } else {
-                count++;
-                searchResultsHref.add(driver.findElement(By.xpath("(//div[@class='v7W49e']/div/div)[" + (i + 1) + "]//h3")).getText());
+        for (int i = 0; i < searchResult.size() - 1; i++) {
+            if (searchResult.get(i).contains("People also ask") || searchResult.get(i).contains("Videos") || searchResult.get(i).contains("Top stories") ||searchResult.get(i).contains("Local results")) {
+                continue;
             }
-            if(count==10)
+            else {
+                if (StringUtils.containsIgnoreCase(searchResult.get(i), KEYWORD)) {
+                    count++;
+                    searchResultsKeyWord.add(driver.findElement(By.xpath("(//div[@class='v7W49e']/div/div)[" + (i + 1) + "]//h3")).getText());
+                } else {
+                    searchResultsWithoutKeyWord.add(driver.findElement(By.xpath("(//div[@class='v7W49e']/div/div)[" + (i + 1) + "]//h3")).getText());
+                }
+            }
+            if (count == 10)
                 break;
         }
-        return searchResultsHref;
+        logger.info("Google Search list without keyword: " + searchResultsWithoutKeyWord);
+        logger.info("Google list is added: " + searchResultsKeyWord);
+        return searchResultsKeyWord;
     }
 
-    public Integer googleResultsCount(){
+    public Integer googleResultsCount() {
         return count;
     }
 
-    public List<String> parseNextPageResults(){
-        googleSearchResults.clickOnPage2();
-       return getGoogleSearchResults();
+    public List<String> parseNextPageResults() {
+        googleSearchResults.clickOnNextPage();
+        return getGoogleSearchResults();
     }
 }
