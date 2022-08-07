@@ -31,7 +31,7 @@ public class BaseDriver {
 
         switch (browserName) {
             case "CHROME": {
-                System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + property.getProperty("CHROME_PATH"));
+                System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/webdrivers/chromedriver.exe");
                 System.out.println("Path of the driver "+ System.getProperty("user.dir") + property.getProperty("CHROME_PATH"));
                 driver = new ChromeDriver();
                 logger.info("Chrome Driver is launched");
