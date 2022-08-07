@@ -21,9 +21,9 @@ public class BaseDriver {
     public static Properties property;
     public static WebDriverWait wait;
     public static Configuration config;
-    private static Logger Log = LogManager.getLogger(BaseDriver.class.getName());
+    protected static Logger logger = LogManager.getLogger();
 
-    public static void creatingTheSession() throws MalformedURLException {
+    public static void creatingTheSession() {
         driver = null;
         config = new Configuration();
         property = config.getProperties();
@@ -33,16 +33,19 @@ public class BaseDriver {
             case "CHROME": {
                 System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + property.getProperty("CHROME_PATH"));
                 driver = new ChromeDriver();
+                logger.info("Chrome Driver is launched");
                 break;
             }
             case "FIREFOX": {
                 System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir") + property.getProperty("GECKO_PATH"));
                 driver = new FirefoxDriver();
+                logger.info("Firefox Driver is launched");
                 break;
             }
             case "MAC_CHROME": {
                 System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + property.getProperty("MAC_CHROME_DRIVER_PATH"));
                 driver = new ChromeDriver();
+                logger.info("Chrome Driver for MAC is launched");
                 break;
             }
 
@@ -56,11 +59,11 @@ public class BaseDriver {
 
     public void navigateToGoogleUrl() {
         driver.get(property.getProperty("GOOGLE_URL"));
-        Log.info("Webdriver is launched with "+property.getProperty("GOOGLE_URL"));
+        logger.info("Webdriver is launched with "+property.getProperty("GOOGLE_URL"));
     }
     public void navigateToBingUrl() {
         driver.get(property.getProperty("BING_URL"));
-        Log.info("Webdriver is launched with "+property.getProperty("BING_URL"));
+        logger.info("Webdriver is launched with "+property.getProperty("BING_URL"));
     }
 
 

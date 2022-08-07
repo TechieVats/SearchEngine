@@ -23,4 +23,13 @@ public class TestingUtility extends BaseDriver {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(time));
     }
 
+    public void click(WebElement element,String msg){
+        logger.info("Clicked on "+msg);
+        element.click();
+    }
+
+    public void enterTheText(WebElement element, String text, String msg){
+        logger.info("Entering "+text+ " in "+ msg);
+        element.sendKeys(text);
+    }
 }

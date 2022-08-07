@@ -4,21 +4,23 @@ import base.BaseDriver;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Assert;
 import pages.Bing;
 import pages.BingSearchResults;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BingAction {
+public class BingAction extends BaseDriver {
 
     Bing bing = new Bing();
     BingSearchResults bingSearchResults = new BingSearchResults();
     BaseDriver base = new BaseDriver();
     public static String KEYWORD = null;
-    private static Logger Log = LogManager.getLogger(BingAction.class.getName());
-    int count =0;
+    int count = 0;
     List<String> resultsWithKeyword = new ArrayList<>();
+    List<String> resultsWithoutKeyword = new ArrayList<>();
+
     public void userIsOnBingSearch() {
         base.navigateToBingUrl();
     }
@@ -27,29 +29,37 @@ public class BingAction {
         KEYWORD = keyword;
         bing.enterTheKeywordToSearch(keyword);
         bing.clickOnSearchButton();
-        Log.info("User is searching " + keyword + " on bing search engine");
+        logger.info("User is searching " + keyword + " on bing search engine");
     }
+
+    /*
+    Below function is to return the list with the matching results with the search keyword
+     */
 
     public List<String> bingSearchResultSWithKeyword() {
         for (String s : bingSearchResults.getSearchTitles()) {
-            if (StringUtils.containsIgnoreCase(s,KEYWORD)) {
+            if (StringUtils.containsIgnoreCase(s, KEYWORD)) {
                 resultsWithKeyword.add(s);
                 count++;
             }
-            if(count==10)
+            else{
+                resultsWithoutKeyword.add(s);
+            }
+            if (count == 10)
                 break;
         }
-
-
-     //   System.out.println("Bing search results all: "+  bingSearchResults.getSearchTitles());
+        logger.info("Bing list without keyword: "+ resultsWithoutKeyword);
+        logger.info("Bing list is added: " + resultsWithKeyword);
         return resultsWithKeyword;
     }
-    public Integer bingResultsCount(){
+
+    public Integer bingResultsCount() {
         return count;
     }
 
-    public List<String> parseNextPageResults(){
+    public List<String> parseNextPageResults() {
         bingSearchResults.clickOnNextPage();
+        Assert.assertTrue(bingSearchResults.nextPageValidation());
         return bingSearchResultSWithKeyword();
     }
 }
