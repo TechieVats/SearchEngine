@@ -32,11 +32,11 @@ public class SearchEngine extends BaseDriver {
         GOOGLE_LIST = googleAction.getGoogleSearchResults();
 
         //validating if 10 search items present in the list or not
-        if (googleAction.googleResultsCount() < 10) {
+        while (googleAction.googleResultsCount() < 10) {
             //updating the list with next page results
             GOOGLE_LIST = googleAction.parseNextPageResults();
         }
-        logger.info("Google final search results: "+ GOOGLE_LIST);
+        logger.info("Google final search results: " + GOOGLE_LIST);
     }
 
     @Given("that the user is on google search engine")
@@ -60,11 +60,11 @@ public class SearchEngine extends BaseDriver {
         BING_LIST = bingAction.bingSearchResultSWithKeyword();
 
         //validating if 10 search items present in the list or not
-        if (bingAction.bingResultsCount() < 10) {
+        while (bingAction.bingResultsCount() < 10) {
             //updating the list with next page results
             BING_LIST = bingAction.parseNextPageResults();
         }
-        logger.info("Bing final search results: "+ BING_LIST);
+        logger.info("Bing final search results: " + BING_LIST);
     }
 
     @And("user is able to fetch the common results from both of the search engines")
